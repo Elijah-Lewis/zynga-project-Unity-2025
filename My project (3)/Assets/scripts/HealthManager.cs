@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class HealthManager : MonoBehaviour
 {
-    public Image healthDisplay;
+    public Image healthBar;
     public float healthAmount = 100f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -32,14 +32,14 @@ public class HealthManager : MonoBehaviour
     public void TakeDamage(float damage)
     {
         healthAmount -= damage;
-        healthDisplay.fillAmount = healthAmount / 100f;
+        healthBar.fillAmount = healthAmount / 100f;
     }
 
     public void Heal(float healingAmount)
     {
         healthAmount += healingAmount;
-        healthAmount = Mathf.Clamp(healingAmount, 0, 100);
+        healthAmount = Mathf.Clamp(healthAmount, 0, 100);
 
-        healthDisplay.fillAmount = healingAmount / 100f;
+        healthBar.fillAmount = healthAmount / 100f;
     }
 }
