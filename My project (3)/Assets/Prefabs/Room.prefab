@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5157303281462454048}
   - component: {fileID: 3993660918947307362}
+  - component: {fileID: 3829393554466395956}
   m_Layer: 0
   m_Name: Room
   m_TagString: Untagged
@@ -58,6 +59,28 @@ MonoBehaviour:
   - {fileID: 1477469935243713574}
   - {fileID: 812067820091450165}
   - {fileID: 552087837687534069}
+--- !u!64 &3829393554466395956
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 717906560167183047}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &2274415095525163791
 GameObject:
   m_ObjectHideFlags: 0
@@ -69,7 +92,7 @@ GameObject:
   - component: {fileID: 8467424440336144823}
   m_Layer: 10
   m_Name: Floor
-  m_TagString: Untagged
+  m_TagString: Floors
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,7 +132,7 @@ GameObject:
   - component: {fileID: 2340978022562366064}
   m_Layer: 10
   m_Name: Walls
-  m_TagString: Untagged
+  m_TagString: Walls
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -148,7 +171,7 @@ GameObject:
   - component: {fileID: 6637017710312089910}
   m_Layer: 0
   m_Name: Entrances
-  m_TagString: Untagged
+  m_TagString: Walls
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -41,8 +41,10 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-
         readyToJump = true;
+
+        // Try to find the TextMeshProUGUI component in the scene (optional)
+        text_speed = FindObjectOfType<TextMeshProUGUI>();
     }
 
     private void Update()
@@ -100,13 +102,17 @@ public class PlayerMovement : MonoBehaviour
         Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
         // limit velocity if needed
-        if(flatVel.magnitude > moveSpeed)
+        if (flatVel.magnitude > moveSpeed)
         {
             Vector3 limitedVel = flatVel.normalized * moveSpeed;
             rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
         }
 
-        text_speed.SetText("Speed: " + flatVel.magnitude);
+        // Null check before setting the text
+        if (text_speed != null)
+        {
+            text_speed.SetText("Speed: " + flatVel.magnitude.ToString("F2"));
+        }
     }
 
     private void Jump()

@@ -16,7 +16,8 @@ public class HealthManager : MonoBehaviour
     {
         if (healthAmount <= 0)
         {
-            Application.LoadLevel(Application.loadedLevel);
+            //Application.LoadLevel(Application.loadedLevel);
+
         }
        if (Input.GetKeyDown(KeyCode.Return))
         {
