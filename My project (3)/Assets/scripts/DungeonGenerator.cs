@@ -15,6 +15,7 @@ public class DungeonGenerator : MonoBehaviour
     public int startPos = 0;
     public GameObject room;
     public Vector2 offset; // this is the distance btwn each room
+    public Vector3 SpawnPosition;
 
     List<Cell> board;
 
@@ -36,6 +37,11 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
         }
+    }
+
+    void setSpawnPosition()
+    {
+        SpawnPosition = new Vector3(0, 0, 0);
     }
 
     void MazeGenerator(){

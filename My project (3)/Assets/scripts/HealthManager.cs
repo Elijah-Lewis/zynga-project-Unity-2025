@@ -5,9 +5,11 @@ public class HealthManager : MonoBehaviour
 {
     public Image healthBar;
     public float healthAmount = 100f;
+    public DungeonGenerator dungeonGenerator;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        dungeonGenerator = FindObjectOfType<DungeonGenerator>();
         
     }
 
@@ -16,7 +18,7 @@ public class HealthManager : MonoBehaviour
     {
         if (healthAmount <= 0)
         {
-            //Application.LoadLevel(Application.loadedLevel);
+            ReloadLevel();
 
         }
        if (Input.GetKeyDown(KeyCode.Return))
@@ -41,6 +43,14 @@ public class HealthManager : MonoBehaviour
         healthAmount += healingAmount;
         healthAmount = Mathf.Clamp(healthAmount, 0, 100);
 
+        healthBar.fillAmount = healthAmount / 100f;
+    }
+
+    void ReloadLevel()
+    {
+        transform.position = dungeonGenerator.SpawnPosition;
+
+        healthAmount = 100f;
         healthBar.fillAmount = healthAmount / 100f;
     }
 }
