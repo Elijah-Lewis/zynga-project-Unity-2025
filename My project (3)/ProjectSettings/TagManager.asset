@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Floors
   - Walls
+  - DoorCollider
+  - Key
   layers:
   - Default
   - TransparentFX
