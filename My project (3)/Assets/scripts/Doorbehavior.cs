@@ -18,6 +18,7 @@ public class DoorDeletion : MonoBehaviour
                 {
                     Destroy(door);
                     Debug.Log("Door deleted!");
+                    Application.LoadLevel(Application.loadedLevel);
                 }
                 else
                 {
