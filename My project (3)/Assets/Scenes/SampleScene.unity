@@ -436,7 +436,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 397171551}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -5546940888850326318, guid: 2cc0b2ad9084ad549a8a45c4633d05c9, type: 3}
 --- !u!4 &397171555
 Transform:
   m_ObjectHideFlags: 0
@@ -1151,6 +1151,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBar: {fileID: 813159657}
   healthAmount: 100
+  maxHealth: 100
+  smoothSpeed: 5
   dungeonGenerator: {fileID: 0}
 --- !u!1 &813159655
 GameObject:
