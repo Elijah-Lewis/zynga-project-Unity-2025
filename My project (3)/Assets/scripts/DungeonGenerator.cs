@@ -13,19 +13,31 @@ public class DungeonGenerator : MonoBehaviour
     public Vector2 size;
     public int startPos = 0;
     public GameObject room;
-    public GameObject keyObject; // Reference to the key GameObject
-    public GameObject doorObject; // Reference to the door GameObject
-    public GameObject enemyObject; // Reference to the enemy GameObject
-    public Vector2 offset; // Distance between rooms
+    public GameObject keyObject;
+    public GameObject doorObject;
+    public GameObject enemyObject;
+    public Vector2 offset;
     public Vector3 SpawnPosition;
-    public float roomScale = 1f; // Scale factor for rooms
+    public float roomScale = 1f;
 
     private List<Cell> board;
-    private HashSet<Vector3> occupiedPositions = new HashSet<Vector3>(); // Prevent overlap
-    private List<GameObject> spawnedRooms = new List<GameObject>(); // Store references to rooms
+    private HashSet<Vector3> occupiedPositions = new HashSet<Vector3>();
+    private List<GameObject> spawnedRooms = new List<GameObject>();
+    private List<GameObject> currentEnemies = new List<GameObject>();  // Track enemies to delete later
+    private GameObject previousKey; // Track previous key
+    private GameObject previousDoor; // Track previous door
+
+    public CanvasGroup fadeCanvasGroup;
+    public float fadeDuration = 1f;
+    public GameObject player;
+    public GameObject doorPrefab;
+    public GameObject keyPrefab;
+    public GameObject enemyPrefab;
+    public Transform[] roomLocations;
 
     void Start()
     {
+        StartCoroutine(FadeIn());
         MazeGenerator();
     }
 
@@ -57,10 +69,9 @@ public class DungeonGenerator : MonoBehaviour
                         newRoom.name = $"Room {i}-{j}";
 
                         occupiedPositions.Add(roomPosition);
-                        spawnedRooms.Add(newRoom); // Store reference to spawned room
+                        spawnedRooms.Add(newRoom);
 
-                        // Randomly spawn enemies in ~1/3 of the rooms
-                        if (Random.Range(0f, 1f) <= 0.33f) // 33% chance
+                        if (Random.Range(0f, 1f) <= 0.33f)
                         {
                             SpawnEnemyInRoom(newRoom);
                         }
@@ -68,48 +79,53 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
         }
-        PlaceKeyInRandomRoom(); // Call after rooms are generated
-        PlaceDoorInRandomRoom(); // Call after rooms are generated
+
+        PlaceKeyInRandomRoom();
+        PlaceDoorInRandomRoom();
     }
 
     public void RegenerateDungeon()
     {
-        // Clear all previously spawned rooms, enemies, key, and door
+        // Destroy all previously spawned objects
         foreach (GameObject room in spawnedRooms)
         {
             Destroy(room);
         }
         spawnedRooms.Clear();
         occupiedPositions.Clear();
+        
+        // Destroy the previous key and door
+        if (previousKey != null)
+        {
+            Destroy(previousKey);
+        }
+        if (previousDoor != null)
+        {
+            Destroy(previousDoor);
+        }
 
-        if (keyObject != null)
-            keyObject.transform.position = new Vector3(1000, 1000, 1000); // Move it far away before regenerating
+        // Destroy previously spawned enemies
+        foreach (GameObject enemy in currentEnemies)
+        {
+            Destroy(enemy);
+        }
+        currentEnemies.Clear();
 
-        if (doorObject != null)
-            doorObject.transform.position = new Vector3(1000, 1000, 1000); // Move it far away before regenerating
-
-        // Reset the board for a fresh maze generation
+        // Re-generate the maze and new dungeon
         board.Clear();
-
-        // Generate a new dungeon layout
         MazeGenerator();
     }
 
     void SpawnEnemyInRoom(GameObject room)
     {
-        // Find the floor object within the room by name
         Transform floor = room.transform.Find("Floor");
 
         if (floor != null)
         {
-            // Get the position of the floor and adjust the Y position for correct height
             Vector3 floorPosition = floor.position;
-
-            // Place the enemy on top of the floor (adjust the Y position)
             Vector3 enemyPosition = new Vector3(floorPosition.x, floorPosition.y + 1f, floorPosition.z);
-
-            // Instantiate the enemy at the position on top of the floor
-            Instantiate(enemyObject, enemyPosition, Quaternion.identity, room.transform);
+            GameObject newEnemy = Instantiate(enemyObject, enemyPosition, Quaternion.identity, room.transform);
+            currentEnemies.Add(newEnemy);  // Track enemies for later deletion
         }
         else
         {
@@ -119,28 +135,24 @@ public class DungeonGenerator : MonoBehaviour
 
     void PlaceKeyInRandomRoom()
     {
-        if (spawnedRooms.Count == 0 || keyObject == null) return; // Safety check
+        if (spawnedRooms.Count == 0 || keyObject == null) return;
 
         int randomIndex = Random.Range(0, spawnedRooms.Count);
         GameObject selectedRoom = spawnedRooms[randomIndex];
+        Vector3 keyPosition = selectedRoom.transform.position + Vector3.up * 1.5f;
 
-        // Determine key position (center of the room)
-        Vector3 keyPosition = selectedRoom.transform.position + Vector3.up * 1.5f; // Adjust Y for visibility
-
-        keyObject.transform.position = keyPosition;
+        previousKey = Instantiate(keyPrefab, keyPosition, Quaternion.identity);  // Store the new key object
     }
 
     void PlaceDoorInRandomRoom()
     {
-        if (spawnedRooms.Count == 0 || doorObject == null) return; // Safety check
+        if (spawnedRooms.Count == 0 || doorObject == null) return;
 
         int randomIndex = Random.Range(0, spawnedRooms.Count);
         GameObject selectedRoom = spawnedRooms[randomIndex];
+        Vector3 doorPosition = selectedRoom.transform.position + Vector3.up * 0.5f;
 
-        // Determine door position (center of the room but lower for placement)
-        Vector3 doorPosition = selectedRoom.transform.position + Vector3.up * 0.5f; // Adjust Y for proper placement
-
-        doorObject.transform.position = doorPosition;
+        previousDoor = Instantiate(doorPrefab, doorPosition, Quaternion.identity);  // Store the new door object
     }
 
     void MazeGenerator()
@@ -182,22 +194,22 @@ public class DungeonGenerator : MonoBehaviour
                 int dx = newCell % (int)size.x - currentCell % (int)size.x;
                 int dy = (newCell / (int)size.x) - (currentCell / (int)size.x);
 
-                if (dx == 1)  // Right
+                if (dx == 1)
                 {
                     board[currentCell].status[2] = true;
                     board[newCell].status[3] = true;
                 }
-                else if (dx == -1)  // Left
+                else if (dx == -1)
                 {
                     board[currentCell].status[3] = true;
                     board[newCell].status[2] = true;
                 }
-                else if (dy == 1)  // Down
+                else if (dy == 1)
                 {
                     board[currentCell].status[1] = true;
                     board[newCell].status[0] = true;
                 }
-                else if (dy == -1)  // Up
+                else if (dy == -1)
                 {
                     board[currentCell].status[0] = true;
                     board[newCell].status[1] = true;
@@ -206,6 +218,7 @@ public class DungeonGenerator : MonoBehaviour
                 currentCell = newCell;
             }
         }
+
         GenerateDungeon();
     }
 
@@ -216,69 +229,67 @@ public class DungeonGenerator : MonoBehaviour
         int x = cell % (int)size.x;
         int y = cell / (int)size.x;
 
-        // Up
         if (y > 0 && !board[cell - (int)size.x].visited)
             neighbors.Add(cell - (int)size.x);
 
-        // Down
         if (y < size.y - 1 && !board[cell + (int)size.x].visited)
             neighbors.Add(cell + (int)size.x);
 
-        // Right
         if (x < size.x - 1 && !board[cell + 1].visited)
             neighbors.Add(cell + 1);
 
-        // Left
         if (x > 0 && !board[cell - 1].visited)
             neighbors.Add(cell - 1);
 
         return neighbors;
     }
 
-    //add a fade transition before changfing scenes
-    public CanvasGroup fadeCanvasGroup;
-    public float fadeDuration = 1f;
-
-    private IEnumerator FadeAndRegenerate()
+    public IEnumerator FadeAndRegenerate()
     {
-        yield return StartCoroutine(FadeOut()); // Fade to black
+        yield return StartCoroutine(FadeOut());
 
-        // Clear previous dungeon
-        foreach (GameObject room in spawnedRooms)
+        RegenerateDungeon();
+
+        if (spawnedRooms.Count > 0 && player != null)
         {
-            Destroy(room);
+            GameObject randomRoom = spawnedRooms[Random.Range(0, spawnedRooms.Count)];
+            player.transform.position = randomRoom.transform.position + Vector3.up * 1.5f;
         }
-        spawnedRooms.Clear();
-        occupiedPositions.Clear();
 
-        if (keyObject != null) keyObject.transform.position = new Vector3(1000, 1000, 1000);
-        if (doorObject != null) doorObject.transform.position = new Vector3(1000, 1000, 1000);
-
-        board.Clear();
-
-        // Generate a new dungeon
-        MazeGenerator();
-
-        yield return StartCoroutine(FadeIn()); // Fade back in
+        yield return StartCoroutine(FadeIn());
     }
 
     private IEnumerator FadeIn()
     {
         fadeCanvasGroup.alpha = 1;
+        fadeCanvasGroup.blocksRaycasts = true;
+        fadeCanvasGroup.interactable = true;
+
         while (fadeCanvasGroup.alpha > 0)
         {
             fadeCanvasGroup.alpha -= Time.deltaTime / fadeDuration;
             yield return null;
         }
+
+        fadeCanvasGroup.alpha = 0;
+        fadeCanvasGroup.blocksRaycasts = false;
+        fadeCanvasGroup.interactable = false;
+        fadeCanvasGroup.gameObject.SetActive(false);
     }
 
     private IEnumerator FadeOut()
     {
+        fadeCanvasGroup.gameObject.SetActive(true);
+        fadeCanvasGroup.blocksRaycasts = true;
+        fadeCanvasGroup.interactable = true;
         fadeCanvasGroup.alpha = 0;
+
         while (fadeCanvasGroup.alpha < 1)
         {
             fadeCanvasGroup.alpha += Time.deltaTime / fadeDuration;
             yield return null;
         }
+
+        fadeCanvasGroup.alpha = 1;
     }
 }

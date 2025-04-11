@@ -18,7 +18,13 @@ public class DoorDeletion : MonoBehaviour
                 {
                     Destroy(door);
                     Debug.Log("Door deleted!");
-                    FindObjectOfType<DungeonGenerator>().RegenerateDungeon();
+
+                    // Trigger the regeneration and fade transition
+                    DungeonGenerator dungeonGen = FindObjectOfType<DungeonGenerator>();
+                    if (dungeonGen != null)
+                    {
+                        StartCoroutine(dungeonGen.FadeAndRegenerate());
+                    }
                 }
                 else
                 {
