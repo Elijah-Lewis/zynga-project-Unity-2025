@@ -15,7 +15,11 @@ public class GunBehavior : MonoBehaviour
     public int magazineSize, bulletsPerTap;
     public bool allowButtonHold;
 
-    int bulletsLeft, bulletsShot;
+
+    // ammo variables
+    [SerializeField] private int bulletsLeft, bulletsShot;
+    [SerializeField] private int totalAmmo; //total amt of ammo
+    public int maxAmmoCapacity = 30; //max amt of ammo
 
     //bools
     bool shooting, readyToShoot, reloading;
@@ -28,6 +32,7 @@ public class GunBehavior : MonoBehaviour
     //Graphics
     public GameObject muzzleFlash;
     public TextMeshProUGUI ammunitionDisplay;
+    public TextMeshProUGUI totalAmmoDisplay;
 
     public bool allowInvoke = true;
 
@@ -36,16 +41,29 @@ public class GunBehavior : MonoBehaviour
         //make sure magazine is full
         bulletsLeft = magazineSize;
         readyToShoot = true;
+
+        //initialization of ammo capacity
+        totalAmmo = 0; //scene begins with full ammo
     }
 
     private void Update()
     {
-        MyInput();   
+        MyInput();
 
         //set ammo display, if it exists
+        UpdateAmmoDisplay();
+    }
+
+    private void UpdateAmmoDisplay()
+    {
         if (ammunitionDisplay != null)
         {
-            ammunitionDisplay.SetText(bulletsLeft / bulletsPerTap + " /" + magazineSize / bulletsPerTap);
+            ammunitionDisplay.SetText($"{bulletsLeft / bulletsPerTap} / {magazineSize / bulletsPerTap}");
+        }
+
+        if (totalAmmoDisplay != null)
+        {
+            totalAmmoDisplay.SetText($"Ammo Left: {totalAmmo}");
         }
     }
 
@@ -61,13 +79,13 @@ public class GunBehavior : MonoBehaviour
         }
 
         //reloading
-        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading)
+        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading && totalAmmo > 0)
         {
             Reload();
         }
 
         //reload automatically when trying to shoot without ammo
-        if (readyToShoot && shooting && !reloading && bulletsLeft <= 0)
+        if (readyToShoot && shooting && !reloading && bulletsLeft <= 0 && totalAmmo > 0)
         {
             Reload();
         }
@@ -156,7 +174,21 @@ public class GunBehavior : MonoBehaviour
 
     private void ReloadFinished()
     {
-        bulletsLeft = magazineSize;
+        int bulletsNeeded = magazineSize - bulletsLeft;
+        int BulletsAvailable = totalAmmo;
+        int bulletsToAdd = Mathf.Min(bulletsNeeded, BulletsAvailable);
+
+        bulletsLeft += bulletsToAdd;
+        totalAmmo -= bulletsToAdd;
+
         reloading = false;
+
+        UpdateAmmoDisplay();
+
+    }
+
+    public void AddAmmo(int amount)
+    {
+        totalAmmo = Mathf.Min(totalAmmo + amount, maxAmmoCapacity);
     }
 }
