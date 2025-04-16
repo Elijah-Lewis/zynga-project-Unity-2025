@@ -367,6 +367,7 @@ MonoBehaviour:
   stoppingDistance: 0.5
   shootRange: 25
   shootInterval: 2
+  enemyHealth: {fileID: 0}
 --- !u!4 &228293281
 Transform:
   m_ObjectHideFlags: 0
@@ -1188,6 +1189,7 @@ GameObject:
   - component: {fileID: 716420281}
   - component: {fileID: 716420280}
   - component: {fileID: 716420286}
+  - component: {fileID: 716420287}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -1215,6 +1217,7 @@ MonoBehaviour:
   stoppingDistance: 0.5
   shootRange: 25
   shootInterval: 1
+  enemyHealth: {fileID: 716420287}
 --- !u!195 &716420281
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1360,6 +1363,22 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &716420287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716420279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7721e983b8544144bb814722f8e63b36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 100
+  healthBarPrefab: {fileID: 8593326809680450561, guid: eb00879de6445334a970d94bbcb59efd, type: 3}
+  healthBarOffset: {x: 0, y: 2, z: 0}
 --- !u!1 &735363275
 GameObject:
   m_ObjectHideFlags: 0
