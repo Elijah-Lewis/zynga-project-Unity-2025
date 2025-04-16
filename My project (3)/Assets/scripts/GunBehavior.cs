@@ -43,7 +43,7 @@ public class GunBehavior : MonoBehaviour
         readyToShoot = true;
 
         //initialization of ammo capacity
-        totalAmmo = 0; //scene begins with full ammo
+        totalAmmo = maxAmmoCapacity; //scene begins with full ammo
     }
 
     private void Update()
@@ -58,7 +58,7 @@ public class GunBehavior : MonoBehaviour
     {
         if (ammunitionDisplay != null)
         {
-            ammunitionDisplay.SetText($"{bulletsLeft / bulletsPerTap} / {magazineSize / bulletsPerTap}");
+            ammunitionDisplay.SetText($"{bulletsLeft} / {totalAmmo}");
         }
 
         if (totalAmmoDisplay != null)
@@ -190,5 +190,6 @@ public class GunBehavior : MonoBehaviour
     public void AddAmmo(int amount)
     {
         totalAmmo = Mathf.Min(totalAmmo + amount, maxAmmoCapacity);
+        UpdateAmmoDisplay();
     }
 }

@@ -126,6 +126,13 @@ public class DungeonGenerator : MonoBehaviour
             Vector3 enemyPosition = new Vector3(floorPosition.x, floorPosition.y + 1f, floorPosition.z);
             GameObject newEnemy = Instantiate(enemyObject, enemyPosition, Quaternion.identity, room.transform);
             currentEnemies.Add(newEnemy);  // Track enemies for later deletion
+
+            EnemyHealth enemyHealth = newEnemy.GetComponent<EnemyHealth>();
+        if (enemyHealth != null)
+        {
+            //adds hp bar
+            enemyHealth.healthBarPrefab = Resources.Load<GameObject>("EnemyHealthbar");
+        }
         }
         else
         {

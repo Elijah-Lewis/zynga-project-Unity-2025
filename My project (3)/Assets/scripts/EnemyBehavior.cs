@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class EnemyBehavior : MonoBehaviour
 {
@@ -11,7 +12,9 @@ public class EnemyBehavior : MonoBehaviour
     public float stoppingDistance = 0.5f;
     public float shootRange = 5f; // Distance at which the enemy will shoot
     public float shootInterval = 2f; // Time between shots
+    public EnemyHealth enemyHealth;
 
+   
     private float lastShootTime;
 
     private void Awake()
@@ -21,6 +24,12 @@ public class EnemyBehavior : MonoBehaviour
 
         // Ensure stopping distance is reasonable
         agent.stoppingDistance = stoppingDistance;
+        //hp 
+        enemyHealth = GetComponent<EnemyHealth>();
+        if (enemyHealth == null)
+        {
+            enemyHealth = gameObject.AddComponent<EnemyHealth>();
+        }
     }
 
     private void Update()
@@ -101,4 +110,6 @@ public class EnemyBehavior : MonoBehaviour
         Debug.Log($"Agent Status: {agent.pathStatus}, Speed: {agent.speed}, " +
                   $"Velocity: {agent.velocity}, Remaining Distance: {agent.remainingDistance}");
     }
+
+
 }
