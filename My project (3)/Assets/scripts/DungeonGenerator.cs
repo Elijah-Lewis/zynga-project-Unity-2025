@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.AI.Navigation;
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -82,6 +83,11 @@ public class DungeonGenerator : MonoBehaviour
 
         PlaceKeyInRandomRoom();
         PlaceDoorInRandomRoom();
+        NavMeshSurface surface = FindFirstObjectByType<NavMeshSurface>();
+        if (surface != null)
+        {
+            surface.BuildNavMesh();
+        }
     }
 
     public void RegenerateDungeon()
@@ -116,28 +122,21 @@ public class DungeonGenerator : MonoBehaviour
         MazeGenerator();
     }
 
-    void SpawnEnemyInRoom(GameObject room)
+    private void SpawnEnemyInRoom(GameObject room)
     {
-        Transform floor = room.transform.Find("Floor");
+        if (enemyPrefab == null || room == null) return;
 
-        if (floor != null)
-        {
-            Vector3 floorPosition = floor.position;
-            Vector3 enemyPosition = new Vector3(floorPosition.x, floorPosition.y + 1f, floorPosition.z);
-            GameObject newEnemy = Instantiate(enemyObject, enemyPosition, Quaternion.identity, room.transform);
-            currentEnemies.Add(newEnemy);  // Track enemies for later deletion
+        Vector3 spawnPosition = room.transform.position;
 
-            EnemyHealth enemyHealth = newEnemy.GetComponent<EnemyHealth>();
-        if (enemyHealth != null)
-        {
-            //adds hp bar
-            enemyHealth.healthBarPrefab = Resources.Load<GameObject>("EnemyHealthbar");
-        }
-        }
-        else
-        {
-            Debug.LogWarning("Floor object not found in room!");
-        }
+        // Add slight random offset so enemies don't stack perfectly
+        float offsetX = Random.Range(-1.5f, 1.5f);
+        float offsetZ = Random.Range(-1.5f, 1.5f);
+        spawnPosition += new Vector3(offsetX, 0, offsetZ);
+
+        GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+        enemy.transform.parent = room.transform;
+
+        Debug.Log("Spawned enemy in room at " + spawnPosition);
     }
 
     void PlaceKeyInRandomRoom()
