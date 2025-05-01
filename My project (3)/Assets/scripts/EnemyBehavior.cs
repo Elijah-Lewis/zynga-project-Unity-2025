@@ -42,6 +42,14 @@ public class EnemyBehavior : MonoBehaviour
 
         agent.stoppingDistance = stoppingDistance;
         agent.speed = moveSpeed;
+
+        // Ensure shootPoint is found on instantiated enemy
+        if (shootPoint == null)
+        {
+            shootPoint = transform.Find("ShootPoint");
+            if (shootPoint == null)
+                Debug.LogWarning("ShootPoint not assigned and not found in children!");
+        }
     }
 
     private void Update()
@@ -91,7 +99,7 @@ public class EnemyBehavior : MonoBehaviour
         if (rb != null)
         {
             Vector3 direction = (player.position - shootPoint.position).normalized;
-            rb.linearVelocity = direction * 10f; // Example projectile speed
+            rb.linearVelocity = direction * 10f; // Fixed from linearVelocity to velocity
         }
 
         Debug.Log("Enemy shot at player!");
