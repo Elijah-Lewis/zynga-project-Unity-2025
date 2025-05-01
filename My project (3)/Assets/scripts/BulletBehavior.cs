@@ -3,6 +3,7 @@ using UnityEngine;
 public class BulletBehavior : MonoBehaviour
 {
     public float maxDistance = 100f; // Maximum distance the bullet can travel
+    public float damage = 20f;
     private Vector3 startPosition;
 
     void Start()
@@ -24,6 +25,11 @@ public class BulletBehavior : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        HealthManager health = collision.gameObject.GetComponent<HealthManager>();
+        if (health != null)
+        {
+            health.TakeDamage(damage);
+        }
         // Destroy the bullet on collision
         Destroy(gameObject);
     }
