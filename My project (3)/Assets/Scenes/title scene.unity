@@ -523,6 +523,7 @@ GameObject:
   m_Component:
   - component: {fileID: 877715271}
   - component: {fileID: 877715272}
+  - component: {fileID: 877715273}
   m_Layer: 0
   m_Name: TitleScreenManager
   m_TagString: Untagged
@@ -552,12 +553,29 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 877715269}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4315a9b01936aa44ea876982a39c41a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sceneToLoad: SampleScene
+--- !u!114 &877715273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877715269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 357750595fdd0614fa159eb53fa5408c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneOrder:
+  - TitleScene
+  - SampleScene
+  - StoryScene2
+  - SampleScene
 --- !u!1 &1012488494
 GameObject:
   m_ObjectHideFlags: 0

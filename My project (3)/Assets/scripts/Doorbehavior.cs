@@ -2,28 +2,29 @@ using UnityEngine;
 
 public class DoorDeletion : MonoBehaviour
 {
-    public GameObject door; 
+    public GameObject door;
     public KeyBehavior keyCollector;
 
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the object entering the trigger is the player
         if (other.CompareTag("Player"))
         {
-            // Check if the player has the key
             if (keyCollector != null && keyCollector.HasKey())
             {
-                // Deletes the door
                 if (door != null)
                 {
                     Destroy(door);
-                    Debug.Log("Door deleted!");
+                    Debug.Log("Door deleted! Progressing to the next gameplay scene.");
 
-                    // Trigger the regeneration and fade transition
-                    DungeonGenerator dungeonGen = FindObjectOfType<DungeonGenerator>();
-                    if (dungeonGen != null)
+                    // Find the SceneCycleManager and tell it to advance
+                    SceneCycleManager sceneCycleManager = FindObjectOfType<SceneCycleManager>();
+                    if (sceneCycleManager != null)
                     {
-                        StartCoroutine(dungeonGen.FadeAndRegenerate());
+                        sceneCycleManager.LoadNextScene();
+                    }
+                    else
+                    {
+                        Debug.LogError("SceneCycleManager not found in the scene!");
                     }
                 }
                 else

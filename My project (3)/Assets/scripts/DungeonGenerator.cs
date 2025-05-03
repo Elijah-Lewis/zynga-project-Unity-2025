@@ -24,9 +24,9 @@ public class DungeonGenerator : MonoBehaviour
     private List<Cell> board;
     private HashSet<Vector3> occupiedPositions = new HashSet<Vector3>();
     private List<GameObject> spawnedRooms = new List<GameObject>();
-    private List<GameObject> currentEnemies = new List<GameObject>();  // Track enemies to delete later
-    private GameObject previousKey; // Track previous key
-    private GameObject previousDoor; // Track previous door
+    private List<GameObject> currentEnemies = new List<GameObject>();
+    private GameObject previousKey;
+    private GameObject previousDoor;
 
     public CanvasGroup fadeCanvasGroup;
     public float fadeDuration = 1f;
@@ -248,21 +248,6 @@ public class DungeonGenerator : MonoBehaviour
             neighbors.Add(cell - 1);
 
         return neighbors;
-    }
-
-    public IEnumerator FadeAndRegenerate()
-    {
-        yield return StartCoroutine(FadeOut());
-
-        RegenerateDungeon();
-
-        if (spawnedRooms.Count > 0 && player != null)
-        {
-            GameObject randomRoom = spawnedRooms[Random.Range(0, spawnedRooms.Count)];
-            player.transform.position = randomRoom.transform.position + Vector3.up * 1.5f;
-        }
-
-        yield return StartCoroutine(FadeIn());
     }
 
     private IEnumerator FadeIn()
