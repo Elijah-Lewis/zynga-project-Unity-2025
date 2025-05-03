@@ -313,7 +313,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Event Horizon: Homebound'
+  m_text: The Forsaken Estate
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -573,8 +573,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneOrder:
   - TitleScene
+  - Story1
   - SampleScene
-  - StoryScene2
   - SampleScene
 --- !u!1 &1012488494
 GameObject:
@@ -737,7 +737,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e43dfa3175311df4193b4b39bbc2e1c4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 06aaea5ffcb8c8848bb985af67c6f40d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

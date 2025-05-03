@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System.Collections;
 
 public class SceneCycleManager : MonoBehaviour
 {
-    public List<string> sceneOrder = new List<string>() { "title scene", "SampleScene", "Story1", "SampleScene" };
+    public List<string> sceneOrder = new List<string>() { "title scene", "transitionlevel", "SampleScene", "SampleScene" };
     private int currentSceneIndex = 0;
     private bool canAdvance = true; // To prevent accidental rapid scene changes
 

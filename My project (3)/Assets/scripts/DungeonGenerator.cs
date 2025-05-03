@@ -20,6 +20,8 @@ public class DungeonGenerator : MonoBehaviour
     public Vector2 offset;
     public Vector3 SpawnPosition;
     public float roomScale = 1f;
+    public GameObject roofPrefab;
+    public float roofHeight = 5f;
 
     private List<Cell> board;
     private HashSet<Vector3> occupiedPositions = new HashSet<Vector3>();
@@ -58,6 +60,12 @@ public class DungeonGenerator : MonoBehaviour
                         var newRoom = Instantiate(room, roomPosition, Quaternion.identity, transform);
                         newRoom.transform.localScale = new Vector3(roomScale, roomScale, roomScale);
 
+                        if (roofPrefab != null)
+                        {
+                            Vector3 roofPosition = roomPosition + Vector3.up * roofHeight;
+                            GameObject roof = Instantiate(roofPrefab, roofPosition, Quaternion.identity, newRoom.transform);
+                            roof.name = $"Roof {i}-{j}";
+                        }
                         Rigidbody rb = newRoom.GetComponent<Rigidbody>();
                         if (rb != null)
                         {
